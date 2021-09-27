@@ -1,0 +1,56 @@
+import sqlite3
+import pandas as pd
+
+connection = sqlite3.connect('books.db')
+pd.options.display.max_columns = 10
+
+a = pd.read_sql('SELECT * FROM authors', connection, index_col=['id'])
+
+b = pd.read_sql('SELECT * FROM titles', connection)
+
+c = pd.read_sql('SELECT * FROM author_ISBN', connection)
+
+d = pd.read_sql("""SELECT title, edition, copyright
+                    FROM titles
+                    WHERE copyright > '2016'""", connection)
+
+e = pd.read_sql("""SELECT id, first, last
+                    FROM authors
+                    WHERE last LIKE 'D%'""",
+               connection, index_col=['id'])
+
+f = pd.read_sql("""SELECT id, first, last
+                    FROM authors
+                    WHERE first LIKE '_b%'""",
+                connection, index_col=['id'])
+
+g = pd.read_sql('SELECT title FROM titles ORDER by title ASC',
+               connection)
+
+h = pd.read_sql("""SELECT id, first, last
+                    FROM authors
+                    ORDER by last, first""",
+               connection, index_col=['id'])
+
+i = pd.read_sql("""SELECT id, first, last
+                    FROM authors
+                    ORDER BY last DESC, first ASC""",
+               connection, index_col=['id'])
+
+j = pd.read_sql("""SELECT isbn, title, edition, copyright
+                    FROM titles
+                    WHERE title LIKE '%How to Program'
+                    ORDER BY title""", connection)
+
+print(a)
+print(b)
+print(c)
+print(d)
+print(e)
+print(f)
+print(g)
+print(h)
+print(i)
+print(j)
+
+connection.close()
